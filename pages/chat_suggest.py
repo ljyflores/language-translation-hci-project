@@ -5,6 +5,7 @@ from audio_recorder_streamlit import audio_recorder  # type: ignore
 from streamlit_float import float_init  # type: ignore
 from utils import (
     get_suggestion_answer,
+    get_translation,
     speech_to_text,
     read_list_of_dicts_from_json,
     save_list_of_dicts_to_json,
@@ -34,7 +35,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = list[dict[str, str]]()
 
 
-st.title("OpenAI Suggestions Chatbot 🤖")
+st.title("Smart Glass Assist Screen")
 
 # Create a container for the microphone and audio recording
 footer_container = st.container()
@@ -68,15 +69,22 @@ if audio_bytes:
     # Get LLM response
     with st.chat_message("assistant"):
         with st.spinner("Thinking🤔..."):
-            llm_str_response = (
-                get_suggestion_answer(st.session_state.messages, "gpt-3.5-turbo-1106")
+            llm_str_translation = (
+                get_translation(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
+            
+            llm_str_suggestion = (
+                get_suggestion_answer(st.session_state.messages, "gpt-4o-mini")
+                or "No response given!"
+            )
+            
         # Output message on screen
-        st.write(llm_str_response)  # type: ignore
+        st.write("Translation: "+llm_str_translation)  # type: ignore
+        st.write("Suggested Response: "+llm_str_suggestion)
         st.session_state.messages.append(
-            {"role": "assistant", "content": llm_str_response}
+            {"role": "assistant", "content": llm_str_translation+"\n"+llm_str_suggestion}
         )
         # Save LLM response to history
-        history_list.append({"role": "Suggestion LLM", "content": llm_str_response})
+        history_list.append({"role": "Suggestion LLM", "content": "Translation: "+llm_str_translation+"  \n"+"Suggested Response: "+llm_str_suggestion})
         save_list_of_dicts_to_json("assets/history.json", history_list)

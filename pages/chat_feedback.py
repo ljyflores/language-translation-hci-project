@@ -34,7 +34,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = list[dict[str, str]]()
 
 
-st.title("OpenAI Feedback Chatbot 🤖")
+st.title("Smart Glass Feedback Screen")
 
 # Create a container for the microphone and audio recording
 footer_container = st.container()
@@ -62,21 +62,22 @@ if audio_bytes:
         st.chat_message("user").markdown(transcript)
         os.remove(webm_file_path)
         # Save partner speaker message to history
-        history_list.append({"role": "Main Speaker", "content": transcript})
+        history_list.append({"role": "User", "content": transcript})
         save_list_of_dicts_to_json("assets/history.json", history_list)
 
     # Get LLM response
     with st.chat_message("assistant"):
         with st.spinner("Thinking🤔..."):
             llm_str_response = (
-                get_feedback_answer(st.session_state.messages, "gpt-3.5-turbo-1106")
+                get_feedback_answer(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
+            
         # Output message on screen
-        st.write(llm_str_response)  # type: ignore
+        st.write("Feedback: "+llm_str_response)  # type: ignore
         st.session_state.messages.append(
             {"role": "assistant", "content": llm_str_response}
         )
         # Save LLM response to history
-        history_list.append({"role": "Feedback LLM", "content": llm_str_response})
+        history_list.append({"role": "Feedback LLM", "content": "Feedback: \n"+llm_str_response})
         save_list_of_dicts_to_json("assets/history.json", history_list)

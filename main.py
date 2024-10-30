@@ -16,7 +16,7 @@ st.set_page_config(
 option_to_page_mapping = {
     "Suggest Mode": "pages/chat_suggest.py",
     "Feedback Mode": "pages/chat_feedback.py",
-    "Voice Commands Mode": "pages/voice.py",
+    "Surrounding Mode": "pages/surrounding.py",
     "History": "pages/history.py",
 }
 
@@ -24,12 +24,12 @@ option_to_page_mapping = {
 root_path = os.path.dirname(os.path.abspath(__file__)).strip("/pages")
 
 # Show available modes
-mode_list = ["Suggest Mode", "Feedback Mode", "Voice Commands Mode", "History"]
+mode_list = ["Suggest Mode", "Feedback Mode", "Surrounding Mode", "History"]
 
 caption_list = [
     "Get model suggestions to continue the conversation",
     "Get feedback on how you can improve your conversation",
-    "Use voice commands to read and translate your surroundings",
+    "Real-time translation of your surroundings",
     "View conversation history",
 ]
 
