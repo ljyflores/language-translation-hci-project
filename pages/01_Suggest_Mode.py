@@ -78,8 +78,8 @@ if audio_bytes:
             )
 
         # Output message on screen
-        st.write(":blue[**Translation:**] " + llm_str_translation)  # type: ignore
-        st.write(":green[**Suggested Response:**] " + llm_str_suggestion)
+        st.write("#### :blue[**Translation:**] " + llm_str_translation)  # type: ignore
+        st.write("#### :green[**Suggested Response:**] " + llm_str_suggestion)
         st.session_state.messages.append(
             {
                 "role": "assistant",

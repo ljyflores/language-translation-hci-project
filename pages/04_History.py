@@ -30,11 +30,13 @@ def main():
         for item in history_list:
             if item["role"] == "User" or item["role"] == "Partner Speaker":
                 st.markdown("---")
-                st.markdown(f":green[**{item['role']}**] :  \n {item['content']}")  # type: ignore
+                st.write(f"#### :green[**{item['role']}**]: {item['content']}")  # type: ignore
 
             elif item["role"] == "Feedback LLM":
                 num_feedback += 1
-                st.markdown(f":blue[**{item['role']}**] :  \n {item['content']}")
+                st.write(f"#### :blue[**{item['role']}**]:")
+                for t in item["content"].split("\n"):
+                    st.write(f"#### {t}")
                 if st.button("Advanced Feedback", key=f"feedback{num_feedback}"):
                     message = [{"role": "user", "content": item["content"]}]
                     llm_advanced_feedback = (
@@ -42,19 +44,21 @@ def main():
                         or "No response given!"
                     )
                     st.markdown(
-                        f":blue[**{item['role']}**] :  \n {llm_advanced_feedback}"
+                        f"#### :blue[**{item['role']}**]: {llm_advanced_feedback}"
                     )
 
             elif item["role"] == "Suggestion LLM":
                 num_suggestions += 1
-                st.markdown(f":blue[**{item['role']}**] :  \n {item['content']}")
+                st.write(f"#### :blue[**{item['role']}**]:")
+                for t in item["content"].split("\n"):
+                    st.write(f"#### {t}")
                 if st.button("Advanced Suggestion", key=f"suggestion{num_suggestions}"):
                     message = [{"role": "user", "content": item["content"]}]
                     llm_advanced_suggestions = (
                         get_suggestion_answer_advanced(message, "gpt-4o-mini")
                         or "No response given!"
                     )
-                    st.markdown(f":blue[**{item['role']}**] :  \n {llm_advanced_suggestions}")  # type: ignore
+                    st.write(f"#### :blue[**{item['role']}**]: {llm_advanced_suggestions}")  # type: ignore
     else:
         st.write("No conversation history to show!")  # type: ignore
 

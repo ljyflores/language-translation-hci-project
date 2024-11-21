@@ -72,7 +72,7 @@ if audio_bytes:
             )
 
         # Output message on screen
-        st.write(":blue[**Feedback:**] " + llm_str_response)  # type: ignore
+        st.write("#### :blue[**Feedback:**] " + llm_str_response)  # type: ignore
         st.session_state.messages.append(
             {"role": "assistant", "content": llm_str_response}
         )

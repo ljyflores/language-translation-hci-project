@@ -19,4 +19,7 @@ if picture:
         llm_str_response = get_surrounding_objects(
             image_path="assets/image.jpg", model="gpt-4o"
         )
-    st.markdown(llm_str_response)
+    if llm_str_response:
+        st.write(f"#### {llm_str_response}")
+    else:
+        st.write(f"#### API Error!")
