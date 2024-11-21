@@ -23,8 +23,6 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.sidebar.success("Mode Selection")
-
 # Initialize floating features for the interface
 float_init()
 
@@ -34,7 +32,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = list[dict[str, str]]()
 
 
-st.title("Smart Glass Feedback Screen")
+st.title("Feedback Mode")
 
 # Create a container for the microphone and audio recording
 footer_container = st.container()
@@ -72,12 +70,14 @@ if audio_bytes:
                 get_feedback_answer(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
-            
+
         # Output message on screen
-        st.write("Feedback: "+llm_str_response)  # type: ignore
+        st.write("#### :blue[**Feedback:**] " + llm_str_response)  # type: ignore
         st.session_state.messages.append(
             {"role": "assistant", "content": llm_str_response}
         )
         # Save LLM response to history
-        history_list.append({"role": "Feedback LLM", "content": "Feedback: \n"+llm_str_response})
+        history_list.append(
+            {"role": "Feedback LLM", "content": "Feedback: \n" + llm_str_response}
+        )
         save_list_of_dicts_to_json("assets/history.json", history_list)

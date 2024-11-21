@@ -24,8 +24,6 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.sidebar.success("Mode Selection")
-
 # Initialize floating features for the interface
 float_init()
 
@@ -35,7 +33,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = list[dict[str, str]]()
 
 
-st.title("Smart Glass Assist Screen")
+st.title("Suggestion Mode")
 
 # Create a container for the microphone and audio recording
 footer_container = st.container()
@@ -73,18 +71,30 @@ if audio_bytes:
                 get_translation(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
-            
+
             llm_str_suggestion = (
                 get_suggestion_answer(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
-            
+
         # Output message on screen
-        st.write("Translation: "+llm_str_translation)  # type: ignore
-        st.write("Suggested Response: "+llm_str_suggestion)
+        st.write("#### :blue[**Translation:**] " + llm_str_translation)  # type: ignore
+        st.write("#### :green[**Suggested Response:**] " + llm_str_suggestion)
         st.session_state.messages.append(
-            {"role": "assistant", "content": llm_str_translation+"\n"+llm_str_suggestion}
+            {
+                "role": "assistant",
+                "content": llm_str_translation + "\n" + llm_str_suggestion,
+            }
         )
         # Save LLM response to history
-        history_list.append({"role": "Suggestion LLM", "content": "Translation: "+llm_str_translation+"  \n"+"Suggested Response: "+llm_str_suggestion})
+        history_list.append(
+            {
+                "role": "Suggestion LLM",
+                "content": "Translation: "
+                + llm_str_translation
+                + "  \n"
+                + "Suggested Response: "
+                + llm_str_suggestion,
+            }
+        )
         save_list_of_dicts_to_json("assets/history.json", history_list)
