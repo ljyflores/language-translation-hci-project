@@ -14,10 +14,10 @@ st.set_page_config(
 )
 
 option_to_page_mapping = {
-    "Suggest Mode": "pages/chat_suggest.py",
-    "Feedback Mode": "pages/chat_feedback.py",
-    "Surrounding Mode": "pages/surrounding.py",
-    "History": "pages/history.py",
+    "Suggest Mode": "pages/01_Suggest_Mode.py",
+    "Feedback Mode": "pages/02_Feedback_Mode.py",
+    "Surrounding Mode": "pages/03_Surrounding_Mode.py",
+    "History": "pages/04_History.py",
 }
 
 # Get root path from session state
@@ -38,5 +38,5 @@ selected_mode = st.radio(
 )
 
 # Go to task
-if st.button("Begin Task", key="task_begin_button"):
+if st.button("Go to Mode!", key="task_begin_button"):
     st.switch_page(option_to_page_mapping[selected_mode])

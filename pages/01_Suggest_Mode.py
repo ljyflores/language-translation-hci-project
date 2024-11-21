@@ -4,7 +4,8 @@ import streamlit as st
 from audio_recorder_streamlit import audio_recorder  # type: ignore
 from streamlit_float import float_init  # type: ignore
 from utils import (
-    get_feedback_answer,
+    get_suggestion_answer,
+    get_translation,
     speech_to_text,
     read_list_of_dicts_from_json,
     save_list_of_dicts_to_json,
@@ -23,8 +24,6 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.sidebar.success("Mode Selection")
-
 # Initialize floating features for the interface
 float_init()
 
@@ -34,7 +33,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = list[dict[str, str]]()
 
 
-st.title("Smart Glass Feedback Screen")
+st.title("Suggestion Mode")
 
 # Create a container for the microphone and audio recording
 footer_container = st.container()
@@ -62,22 +61,40 @@ if audio_bytes:
         st.chat_message("user").markdown(transcript)
         os.remove(webm_file_path)
         # Save partner speaker message to history
-        history_list.append({"role": "User", "content": transcript})
+        history_list.append({"role": "Partner Speaker", "content": transcript})
         save_list_of_dicts_to_json("assets/history.json", history_list)
 
     # Get LLM response
     with st.chat_message("assistant"):
         with st.spinner("Thinking🤔..."):
-            llm_str_response = (
-                get_feedback_answer(st.session_state.messages, "gpt-4o-mini")
+            llm_str_translation = (
+                get_translation(st.session_state.messages, "gpt-4o-mini")
                 or "No response given!"
             )
-            
+
+            llm_str_suggestion = (
+                get_suggestion_answer(st.session_state.messages, "gpt-4o-mini")
+                or "No response given!"
+            )
+
         # Output message on screen
-        st.write("Feedback: "+llm_str_response)  # type: ignore
+        st.write(":blue[**Translation:**] " + llm_str_translation)  # type: ignore
+        st.write(":green[**Suggested Response:**] " + llm_str_suggestion)
         st.session_state.messages.append(
-            {"role": "assistant", "content": llm_str_response}
+            {
+                "role": "assistant",
+                "content": llm_str_translation + "\n" + llm_str_suggestion,
+            }
         )
         # Save LLM response to history
-        history_list.append({"role": "Feedback LLM", "content": "Feedback: \n"+llm_str_response})
+        history_list.append(
+            {
+                "role": "Suggestion LLM",
+                "content": "Translation: "
+                + llm_str_translation
+                + "  \n"
+                + "Suggested Response: "
+                + llm_str_suggestion,
+            }
+        )
         save_list_of_dicts_to_json("assets/history.json", history_list)
