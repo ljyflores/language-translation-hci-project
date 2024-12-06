@@ -19,13 +19,14 @@ option_to_page_mapping = {
     "Surrounding Mode": "pages/03_Surrounding_Mode.py",
     "History": "pages/04_History.py",
     "Help": "pages/05_Help.py",
+    "Conversation": "pages/06_Conversation_Mode.py",
 }
 
 # Get root path from session state
 root_path = os.path.dirname(os.path.abspath(__file__)).strip("/pages")
 
 # Show available modes
-mode_list = ["Suggest Mode", "Feedback Mode", "Surrounding Mode", "History", "Help"]
+mode_list = ["Suggest Mode", "Feedback Mode", "Surrounding Mode", "History", "Help", "Conversation"]
 
 caption_list = [
     "Get model suggestions to continue the conversation",
@@ -33,6 +34,7 @@ caption_list = [
     "Real-time translation of your surroundings",
     "View conversation history",
     "Get help on how to use the tool",
+    "Simutaneously get suggestions and feedback during real-time conversation",
 ]
 
 selected_mode = st.radio(
