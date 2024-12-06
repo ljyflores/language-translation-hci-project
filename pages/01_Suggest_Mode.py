@@ -3,6 +3,7 @@ import streamlit as st
 
 from audio_recorder_streamlit import audio_recorder  # type: ignore
 from streamlit_float import float_init  # type: ignore
+from streamlit_js_eval import streamlit_js_eval
 from utils import (
     get_suggestion_answer,
     get_translation,
@@ -38,6 +39,7 @@ st.title("Suggestion Mode")
 # Create a container for the microphone and audio recording
 footer_container = st.container()
 with footer_container:
+    st.write("Press when the partner speaker is talking!")
     audio_bytes = audio_recorder()
 
 if audio_bytes:
@@ -98,3 +100,6 @@ if audio_bytes:
             }
         )
         save_list_of_dicts_to_json("assets/history.json", history_list)
+
+if st.button("Clear Page"):
+    streamlit_js_eval(js_expressions="parent.window.location.reload()")
