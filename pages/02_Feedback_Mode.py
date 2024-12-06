@@ -3,6 +3,7 @@ import streamlit as st
 
 from audio_recorder_streamlit import audio_recorder  # type: ignore
 from streamlit_float import float_init  # type: ignore
+from streamlit_js_eval import streamlit_js_eval
 from utils import (
     get_feedback_answer,
     speech_to_text,
@@ -37,6 +38,7 @@ st.title("Feedback Mode")
 # Create a container for the microphone and audio recording
 footer_container = st.container()
 with footer_container:
+    st.write("Press when you are talking!")
     audio_bytes = audio_recorder()
 
 if audio_bytes:
@@ -81,3 +83,6 @@ if audio_bytes:
             {"role": "Feedback LLM", "content": "Feedback: \n" + llm_str_response}
         )
         save_list_of_dicts_to_json("assets/history.json", history_list)
+
+if st.button("Clear Page"):
+    streamlit_js_eval(js_expressions="parent.window.location.reload()")
